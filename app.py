@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+
 # Load data
 df=pd.read_csv("vehicles_us.csv")
 
@@ -32,7 +33,15 @@ st.subheader("Price vs Mileage")
 fig_scatter = px.scatter(df, x='odometer', y='price', title='Price vs Mileage', trendline='ols')
 st.plotly_chart(fig_scatter)
 
-# Checkbox to show filtered data
-if st.checkbox("Show only expensive cars (price > 50,000)"):
-    df_filtered = df[df['price'] > 50000].sort_values(by='price', ascending=False)
-    st.write(df_filtered[['model', 'price', 'odometer', 'condition']].reset_index())
+# Ensure filtering works dynamically
+df_filtered = df.copy()
+
+# Additional checkbox to filter by model year
+filter_recent = st.checkbox("Show only recent cars (model year > 2015)")
+if filter_recent:
+    df_filtered = df_filtered[df_filtered['model_year'] > 2015]
+
+# New scatter plot: Price vs Model Year
+st.subheader("Price vs Model Year")
+fig_year = px.scatter(df_filtered, x='model_year', y='price', title='Price vs Model Year', trendline='ols')
+st.plotly_chart(fig_year)
