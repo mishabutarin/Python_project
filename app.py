@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 # Load data
-df = pd.read_csv('vehicles_us.csv',dtype_backend="numpy_nullable")
+df=pd.read_csv("vehicles_us.csv")
 
 # Clean data
 df=df.drop_duplicates()
