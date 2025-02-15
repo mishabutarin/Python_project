@@ -11,6 +11,12 @@ df=df.drop_duplicates()
 df.replace("", pd.NA, inplace=True)
 df.replace(" ", pd.NA, inplace=True)
 
+# Fill missing values
+df['model_year'] = df['model_year'].fillna(df['model_year'].median())
+df['cylinders'] = df.groupby('model')['cylinders'].transform(lambda x: x.fillna(x.median()))
+df['odometer'] = df.groupby('model')['odometer'].transform(lambda x: x.fillna(x.median()))
+df['paint_color'] = df['paint_color'].fillna('Unknown')
+
 # Convert numerical columns (handling potential NaN values)
 num_cols = ['price', 'odometer', 'model_year']
 for col in num_cols:
@@ -35,6 +41,8 @@ st.plotly_chart(fig_scatter)
 
 # Ensure filtering works dynamically
 df_filtered = df.copy()
+
+
 
 # Additional checkbox to filter by model year
 filter_recent = st.checkbox("Show only recent cars (model year > 2015)")
